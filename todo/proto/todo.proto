@@ -1,0 +1,65 @@
+syntax ="proto3";
+package todo;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/mehmetkmrc/ToDoApp/todo/proto";
+
+
+message Event{
+    string id =1;
+    string author_id =2;
+    string title = 3;
+    string content = 4;
+}
+
+message EventId{
+    string id =1;
+}
+
+service EventService{
+    rpc CreateEvent (Event) returns (EventId);
+    rpc ReadEvent (EventId) returns (Event);
+    rpc UpdateEvent (Event) returns (google.protobuf.Empty);
+    rpc DeleteEvent (EventId) returns (google.protobuf.Empty);
+    rpc ListEvents (google.protobuf.Empty) returns (stream Event);
+}
+
+
+
+/*
+package main
+
+import (
+    "context"
+    "log"
+
+    "github.com/mehmetkmrc/ToDoApp/todo/db"
+    pb "github.com/mehmetkmrc/ToDoApp/todo/proto"
+    "google.golang.org/protobuf/types/known/emptypb"
+)
+
+func(s *Server) UpdateEvent(ctx context.Context, in *pb.Event) (*emptypb.Empty, error){
+    log.Printf("updateEvent çalıştırıldı : %v\n", in)
+
+    query := `
+    UPDATE events
+    SET author_id = $1, title = $2, content = $3
+    WHERE id = $4 
+    `
+    stmt, err := db.DB.Prepare(query)
+
+
+    if err != nil {
+        return nil, err
+    }
+    defer stmt.Close()
+
+    var event pb.Event
+    _, err = stmt.Exec(event.Id)
+
+    return &emptypb.Empty{}, nil
+}
+
+
+*/
